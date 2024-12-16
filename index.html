@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt and Decrypt Text</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 500px;
+            border-radius: 3px;
+            margin: 0 auto;
+            
+        }
+        input, button {
+            margin: 5px 0;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            cursor: pointer;
+            background-color:green;
+
+          border-radius: 5px;
+          box-shadow: 2px 2px 2 green;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color:blueviolet;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Encrypt and Decrypt Text</h1>
+        <label for="plainText">Plain Text:</label>
+        <input type="text" id="plainText" placeholder="Enter plain text"><br>
+
+        <label for="key">Key (A number between 1-25):</label>
+        <input type="number" id="key" placeholder="Enter key" min="0" 
+        max="25">
+        <br>
+
+        <button id="encryptBtn">Encrypt</button>
+        <button id="decryptBtn">Decrypt</button>
+
+        <h2>Result:</h2>
+        <p id="result">Your result will appear here...</p>
+    </div>
+
+    <script>
+        // Alphabet array
+        const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
+        // Function to encrypt text
+        function encrypt(text, key) {
+            return text
+                .toLowerCase()
+                .split("")
+                .map(char => {
+                    const index = alphabet.indexOf(char);
+                    if (index === -1) return char; // Keep non-alphabetic characters as is
+                    return alphabet[(index + key) % 26];
+                })
+                .join("");
+        }
+
+        // Function to decrypt text
+        function decrypt(text, key){
+            return text
+                .toLowerCase()
+                .split("")
+                .map(char => {
+                    const index = alphabet.indexOf(char);
+                    if (index === -1) return char; // Keep non-alphabetic characters as is
+                    return alphabet[(index - key + 26) % 26];
+                })
+                .join("");
+        }
+
+        // Event listeners
+        document.getElementById("encryptBtn").addEventListener("click", () => {
+            const plainText = document.getElementById("plainText").value;
+            const key = parseInt(document.getElementById("key").value);
+
+            if (!plainText || isNaN(key)) {
+                alert("Please enter both plain text and a valid key.");
+                return;
+            }
+
+            const encryptedText = encrypt(plainText, key);
+            document.getElementById("result").textContent = encryptedText;
+        });
+
+        document.getElementById("decryptBtn").addEventListener("click", () => {
+            const encryptedText = document.getElementById("plainText").value; // Encrypted text should be used here
+            const key = parseInt(document.getElementById("key").value);
+
+            if (!encryptedText || isNaN(key)) {
+                alert("Please enter both encrypted text and a valid key.");
+                return;
+            }
+
+            const decryptedText = decrypt(encryptedText, key);
+            document.getElementById("result").textContent = decryptedText;
+        });
+    </script>
+</body>
+</html>
+ 
